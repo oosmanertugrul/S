@@ -1,0 +1,9 @@
+import random 
+harfler = "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+sayiler = "1234567890"
+semboller = "+-/*!&$#?=@"
+sifre_uzunlugu = int(input("şifreniz kaç haneli olsun?"))
+sifre = ""
+for i in range(sifre_uzunlugu):
+    sifre += random.choice(harfler)
+print(sifre)
