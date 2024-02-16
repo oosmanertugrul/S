@@ -1,0 +1,78 @@
+import discord
+import string
+from discord.ext import commands
+from datetime import datetime
+import asyncio
+import random
+
+intents = discord.Intents.default()
+intents.message_content = True
+
+bot = commands.Bot(command_prefix='/', intents=intents)
+
+@bot.event
+async def on_ready():
+    print(f'{bot.user} olarak giriş yaptık')
+
+@bot.command(name='yapımcım')
+async def yapimci(ctx):
+    await ctx.send("Beni yapan OSMAN REİSTİR. O zaman korkucaksın işte!")
+
+intents = discord.Intents.default()
+intents.message_content = True
+
+bot = commands.Bot(command_prefix='/', intents=intents)
+
+@bot.event
+async def on_ready():
+    print(f'{bot.user} olarak giriş yaptık')
+
+@bot.command(name='topla')
+async def topla(ctx, sayi1: int, sayi2: int):
+    sonuc = sayi1 + sayi2
+    await ctx.send(f'{sayi1} + {sayi2} = {sonuc}')
+
+@bot.command()
+async def yazı0tura(ctx):
+    # Kullanıcıya seçim yapma talimatını gönder
+    await ctx.send("Yarışmaya hoş geldiniz! Lütfen seçiminizi yapın: yazı veya tura")
+
+    def check(msg):
+        return msg.author == ctx.author and msg.channel == ctx.channel and \
+               msg.content.lower() in ['yazı', 'tura']
+
+    # Kullanıcının cevabını bekleyin
+    try:
+        message = await bot.wait_for('message', check=check, timeout=30)
+    except asyncio.TimeoutError:
+        await ctx.send("Zaman aşımına uğradınız. Lütfen daha sonra tekrar deneyin.")
+        return
+
+    # Rastgele bir sonuç seçin
+    result = random.choice(["Yazı", "Tura"])
+
+    # Kullanıcının seçimi ile sonucu karşılaştırın
+    if message.content.lower() == result.lower():
+        await ctx.send(f"Tebrikler! win aldın reis! Sonuç: {result}")
+    else:
+        await ctx.send(f"Maalesef, gg oldun bir sonraki ele ezilmen dileğle! Sonuç: {result}")
+
+intents = discord.Intents.default()
+intents.message_content = True
+
+bot = commands.Bot(command_prefix='/', intents=intents)
+
+@bot.event
+async def on_ready():
+    print(f'{bot.user} olarak giriş yaptık')
+
+@bot.command(name='çıkar')
+async def çıkar(ctx, sayi1: int, sayi2: int):
+    sonuc = sayi1 - sayi2
+    await ctx.send(f'{sayi1} - {sayi2} = {sonuc}')
+
+
+
+
+
+bot.run("")
