@@ -1,0 +1,112 @@
+import discord
+import string
+from discord.ext import commands
+from datetime import datetime
+import asyncio
+import random
+
+intents = discord.Intents.default()
+intents.message_content = True
+
+
+bot = commands.Bot(command_prefix='/', intents=intents)
+
+
+@bot.event
+async def on_ready():
+    print(f'{bot.user} olarak giriş yaptık')
+
+
+@bot.command(name="topla")
+async def topla(ctx,sayi1:int, sayi2:int):
+    sonuc = sayi1 + sayi2
+    await ctx.send(f"{sayi1} + {sayi2} = {sonuc}")
+
+
+@bot.command(name='çıkar')
+async def çıkar(ctx, sayi1: int, sayi2: int):
+    sonuc = sayi1 - sayi2
+    await ctx.send(f'{sayi1} - {sayi2} = {sonuc}')
+
+
+@bot.command(name="çarp")
+async def çarp(ctx, sayi1: int, sayi2: int):
+    sonuc = sayi1 * sayi2
+    await ctx.send(f"{sayi1} * {sayi2} = {sonuc}")
+
+
+@bot.command(name="böl")
+async def böl(ctx, sayi1:int, sayi2:int):
+    sonuc = sayi1 / sayi2 
+    await ctx.send(f"{sayi1} / {sayi2} = {sonuc}")
+
+
+@bot.command(name="yapımcın")
+async def yapımcı(ctx):
+    await ctx.send("Ben kendimi yaptım reis")
+
+
+
+@bot.command()
+async def tkm(ctx, user_choice: str):
+    choices = ['taş', 'kağıt', 'makas']
+    win_conditions = {
+        'taş': 'makas',
+        'kağıt': 'taş',
+        'makas': 'kağıt'
+    }
+
+    user_choice = user_choice.lower()
+    if user_choice not in choices:
+        await ctx.send("Geçersiz seçim yaptın.'taş', 'kağıt' veya 'makas' seç.")
+        return
+
+    bot_choice = random.choice(choices)  # Botun rastgele seçimi
+    await ctx.send(f"Ben {bot_choice} seçtim.")
+
+    # Kazananı kontrol et
+    if user_choice == bot_choice:
+        await ctx.send("Berabere!")
+    elif win_conditions[user_choice] == bot_choice:
+        await ctx.send("Tebrikler, kazandınız!")
+    else:
+        await ctx.send("Maalesef, gg oldun bir sonraki ele ezilmen dileğle!")
+
+
+
+
+@bot.command()
+async def yazıtura(ctx):
+    # Kullanıcıya seçim yapma talimatını gönder
+    await ctx.send("Hoşgeldin reis, seç gitsin: yazı veya tura")
+
+    def check(msg):
+        return msg.author == ctx.author and msg.channel == ctx.channel and \
+               msg.content.lower() in ['yazı', 'tura']
+
+    # Kullanıcının cevabını bekleyin
+    try:
+        message = await bot.wait_for('message', check=check, timeout=30)
+    except asyncio.TimeoutError:
+        await ctx.send("Zaman aşımı.Sonra gene dene bakalım")
+        return
+
+    # Rastgele bir sonuç seçin
+    result = random.choice(["Yazı", "Tura"])
+
+    # Kullanıcının seçimi ile sonucu karşılaştırın
+    if message.content.lower() == result.lower():
+        await ctx.send(f"Tebrikler! win aldın reis! Sonuç: {result}")
+    else:
+        await ctx.send(f"Maalesef, gg oldun bir sonraki ele ezilmen dileğle! Sonuç: {result}")
+
+
+
+
+
+
+
+
+
+
+bot.run("MTIwNTU4ODIzNTA1Nzc2MjM1NA.G4dSpM.211tvxBbM4IxhMoD7DoQ-Mg5gBvAcQ3ffDCdbQ")
